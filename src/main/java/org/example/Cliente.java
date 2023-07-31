@@ -1,11 +1,33 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
-private String nome;
-private List<Endereco> enderecos;
-private String telefone;
+    private String nome;
+    private List<Endereco> enderecos;
+    private String telefone;
+    private List<Pedido> pedidos = new ArrayList<>();
+
+    public Cliente(String nome, String telefone, List<Endereco> enderecos) {
+        this.nome = nome;
+        this.enderecos = enderecos;
+        this.telefone = telefone;
+    }
+
+    public Cliente() {    }
+
+    public List<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    public void addPedido(Pedido pedidos) {
+        this.pedidos.add(pedidos);
+    }
 
     public String getNome() {
         return nome;
@@ -29,14 +51,5 @@ private String telefone;
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
-    }
-
-    public Cliente(String nome, List<Endereco> enderecos, String telefone) {
-        this.nome = nome;
-        this.enderecos = enderecos;
-        this.telefone = telefone;
-    }
-    public Cliente() {
-
     }
 }
