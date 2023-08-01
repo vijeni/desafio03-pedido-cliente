@@ -25,8 +25,8 @@ public class Cliente {
         this.pedidos = pedidos;
     }
 
-    public void addPedido(Pedido pedidos) {
-        this.pedidos.add(pedidos);
+    public void addPedido(Pedido pedido) {
+        this.pedidos.add(pedido);
     }
 
     public String getNome() {

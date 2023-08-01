@@ -1,20 +1,20 @@
 package org.example;
 
 public class Pedido {
-    private Sabores sabores;
+    private Sabor sabor;
     private boolean isEncerrado;
 
-    public Pedido(Sabores sabores) {
-        this.sabores = sabores;
+    public Pedido(Sabor sabores) {
+        this.sabor = sabores;
         this.isEncerrado = false;
     }
 
-    public Sabores getSabores() {
-        return sabores;
+    public Sabor getSabor() {
+        return sabor;
     }
 
-    public void setSabores(Sabores sabores) {
-        this.sabores = sabores;
+    public void setSabor(Sabor sabor) {
+        this.sabor = sabor;
     }
 
     public boolean isEncerrado() {

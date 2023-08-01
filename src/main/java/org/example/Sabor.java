@@ -1,6 +1,6 @@
 package org.example;
 
-public enum Sabores {
+public enum Sabor {
     CALABRESA,
     QUATRO_QUEIJOS,
     STROGONOFF,
