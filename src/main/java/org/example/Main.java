@@ -57,7 +57,7 @@ public class Main {
             System.out.println("2 - Editar Cliente");
             System.out.println("3 - Listar Clientes");
             System.out.println("4 - Pesquisar Cliente");
-            System.out.println("0 - Sair.\n");
+            System.out.println("0 - Voltar.\n");
             opc = input.nextInt();
             switch (opc) {
                 case 1:
@@ -102,9 +102,9 @@ public class Main {
         System.out.println("\n ========= Cadastro de Endereço: ");
         int opc = 1;
         do {
-            System.out.println("\n - Digite seu logradouro: ");
+            System.out.println("\n - Digite o logradouro: ");
             String logradouro = input.next();
-            System.out.println("\n - Digite o número de seu endereço: ");
+            System.out.println("\n - Digite o número do endereço: ");
             String numero = input.next();
             System.out.println("\n - Digite o bairro: ");
             String bairro = input.next();
@@ -210,7 +210,7 @@ public class Main {
             System.out.println("1 - Novo Pedido");
             System.out.println("2 - Relatório de Pedidos");
             System.out.println("3 - Encerrar um Pedido");
-            System.out.println("0 - Sair.\n");
+            System.out.println("0 - Voltar.\n");
             opc = input.nextInt();
             switch (opc) {
                 case 1:
@@ -242,8 +242,9 @@ public class Main {
         for (Endereco end :
                 clientes.get(indexCliente).getEnderecos()) {
             System.out.printf(" --- ( %s ) - Logradouro:  %s %s - %s ( %s )%n", j, end.getLogradouro(), end.getNumero(), end.getBairro(), end.getCep());
+            j++;
         }
-        System.out.println("\n- Digite o número do endereço (presente entre parenteses):");
+        System.out.println("\n- Digite o número do endereço para entrega (presente entre parenteses):");
         int indexEndereco = input.nextInt() - 1;
         final Sabor[] sabores = Sabor.values();
         System.out.println("\n- Selecione o sabor de pizza, digitando seu número no cardápio:\n");
