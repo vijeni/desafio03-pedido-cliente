@@ -1,6 +1,11 @@
 package org.example;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -57,7 +62,7 @@ public class Main {
     public static int pesquisarCliente() {
         Cliente clientePesquisado = null;
         int indexClientePesquisado = -1;
-        System.out.println("\nDigite o nome do cliente que deseja ver informações:");
+        System.out.println("\nDigite o nome do cliente:");
         String nomeCliente = input.next();
         int i = 0;
         for (Cliente cliente:
@@ -166,6 +171,14 @@ public class Main {
         listarClientes();
         Sabor sabor = null;
         int indexCliente = pesquisarCliente();
+        System.out.println("\n- Selecione o endereço do cliente:");
+        int j = 1;
+        for (Endereco end:
+                clientes.get(indexCliente).getEnderecos()) {
+            System.out.printf(" --- ( %s ) - Logradouro:  %s %s - %s ( %s )%n", j, end.getLogradouro(), end.getNumero(), end.getBairro(), end.getCep());
+        }
+        System.out.println("\n- Digite o número do endereço (presente entre parenteses):");
+        int indexEndereco = input.nextInt()-1;
         final Sabor[] sabores = Sabor.values();
         System.out.println("\n- Selecione o sabor de pizza, digitando seu número no cardápio:\n");
         for (int i = 0; i < sabores.length; i++) {
@@ -175,7 +188,7 @@ public class Main {
         if (opc <= sabores.length) {
             sabor = sabores[opc];
             System.out.println("Você escolheu o sabor: " + sabor.name());
-            clientes.get(indexCliente).addPedido(new Pedido(sabor));
+            clientes.get(indexCliente).addPedido(new Pedido(sabor, clientes.get(indexCliente).getEnderecos().get(indexEndereco)));
             System.out.println("========== PEDIDO REALIZADO ==========\n");
         }else {
             System.out.println("Opção inválida ");
@@ -191,7 +204,7 @@ public class Main {
             }
         }
     }
-    public static void operacoesPedidos(){
+    public static void operacoesPedidos() throws IOException {
         int opc = 1;
         do{
             System.out.println("\n=================== GERENCIAR PEDIDOS ===================\n");
@@ -199,7 +212,6 @@ public class Main {
             System.out.println("1 - Novo Pedido");
             System.out.println("2 - Relatório de Pedidos");
             System.out.println("3 - Encerrar um Pedido");
-            System.out.println("4 - Reimprimir comprovante");
             System.out.println("0 - Sair.\n");
             opc = input.nextInt();
             switch (opc) {
@@ -210,12 +222,8 @@ public class Main {
                     relatorioPedidos();
                     break;
                 case 3:
-//                    encerrarPedido();
+                    encerrarPedido();
                     break;
-                case 4:
-//                    comprovantePedido();
-                    break;
-
                 case 0: // Sair
                     System.out.println("\nSaindo...");
                     break;
@@ -225,11 +233,55 @@ public class Main {
             }
         }while (opc!=0);
     }
-    public static void main(String[] args) {
+
+    private static void comprovantePedido(Cliente cliente, Pedido pedido) throws IOException {
+        Date hoje = new Date();
+        SimpleDateFormat formato = new SimpleDateFormat("ddMMyyyy");
+        String nomeArquivo = String.format("pedido%s-%s", cliente.getNome(), formato.format(hoje));
+        String currentDirectory = System.getProperty("user.dir");
+        String filePath = currentDirectory + String.format("/src/main/java/org/example/comprovantes/%s", nomeArquivo);
+
+        try {
+            FileWriter fileWriter = new FileWriter(filePath);
+            PrintWriter printWriter = new PrintWriter(fileWriter);
+
+            printWriter.println("Cliente: " + cliente.getNome());
+            printWriter.println("Telefone do Cliente: " + cliente.getTelefone());
+            printWriter.println("======== Endereço De Entrega ========");
+            printWriter.println("Logadouro: " + pedido.getEndereco().getLogradouro());
+            printWriter.println("Número: " + pedido.getEndereco().getNumero());
+            printWriter.println("Bairro: " + pedido.getEndereco().getBairro());
+            printWriter.println("CEP: " + pedido.getEndereco().getCep());
+            printWriter.close();
+            System.out.println("Comprovante de Pedido emitido com sucesso em: " + filePath);
+        } catch (IOException e) {
+            System.err.println("Erro ao emitir o comprovante:");
+            e.printStackTrace();
+        }
+    }
+
+    private static void encerrarPedido() throws IOException {
+        System.out.println("================= ENCERRAR PEDIDO =================\n");
+        System.out.println("Escolha o cliente do pedido");
+        listarClientes();
+        int indexCliente = pesquisarCliente();
+        System.out.println("Informe o pedido a ser encerrado:");
+        int i = 1;
+        for (Pedido pedido:
+             clientes.get(indexCliente).getPedidos()) {
+            System.out.printf("\n( %s ) - Pedido cliente %s: \n- Sabor: %s \n- Status: %s %n", i, clientes.get(indexCliente).getNome(), pedido.getSabor(), pedido.isEncerrado() ? "Encerrado": "Aberto");
+            i++;
+        }
+        System.out.println("Digite o número do pedido:");
+        int indexPedido = input.nextInt() -1;
+        clientes.get(indexPedido).getPedidos().get(indexPedido).encerrar();
+        System.out.println("Por favor, aguarde a impressão do comprovante, na pasta 'comprovantes' ...\n");
+        comprovantePedido(clientes.get(indexCliente), clientes.get(indexPedido).getPedidos().get(indexPedido));
+        System.out.println("================= PEDIDO ENCERRADO =================\n");
+    }
+
+    public static void main(String[] args) throws IOException {
         List<Endereco> ends = new ArrayList<>();
-        ends.add(new Endereco("rua", "numero", "bairro", "cep"));
-        clientes.add(new Cliente("Jean", "111111111", ends));
-        clientes.add(new Cliente("Vinicius", "222222222", ends));
         int opc;
         do {
             opc = menuPrincipal();

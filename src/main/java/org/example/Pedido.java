@@ -2,11 +2,21 @@ package org.example;
 
 public class Pedido {
     private Sabor sabor;
+    private Endereco endereco;
     private boolean isEncerrado;
 
-    public Pedido(Sabor sabores) {
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
+
+    public Pedido(Sabor sabores, Endereco endereco) {
         this.sabor = sabores;
         this.isEncerrado = false;
+        this.endereco = endereco;
     }
 
     public Sabor getSabor() {
@@ -21,7 +31,7 @@ public class Pedido {
         return isEncerrado;
     }
 
-    public void setEncerrado(boolean encerrado) {
-        isEncerrado = encerrado;
+    public void encerrar() {
+        this.isEncerrado = true;
     }
 }
